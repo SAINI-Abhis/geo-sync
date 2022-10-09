@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import SharePage from "./share_screen/share_screen";
+import UploadPage from "./upload_page/upload_page";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+export default function App() {
+  let path = window.location.href;
+  let paths = path.split('/');
+  let id = paths[paths.length-1];
+  if(id.length){
+    return <SharePage/>;
+  }else{
+    return (<UploadPage/>);
+  }
 }
-
-export default App;
