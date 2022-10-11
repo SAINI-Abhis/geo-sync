@@ -23,6 +23,12 @@ const SharePage = () => {
   const load_data = async () => {
     const document = await getDoc(ref);
     setData(document.data());
+    map.current.flyTo({
+      center: document.data().features[0].geometry.coordinates,
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
+      });
+    // setLat(document.data().features[0].geometry.coordinates[0]);
+    // setLng(document.data().features[0].geometry.coordinates[1]);
   }
 
   const initMap = () => {
@@ -70,6 +76,7 @@ const SharePage = () => {
         setUploading(true);
         const s = await updateDoc(ref,data);
         setUploading(false);
+        window.location.reload(false);
         // console.log("DONE",s);
     }
     GetFile.readAsText(e.target.files[0]);
@@ -78,10 +85,11 @@ const SharePage = () => {
     <div>
       {
           <div>
-            <div style={{position:'absolute',zIndex:1000}}>
+            <div style={{position:'absolute',zIndex:1000,backgroundColor:'white',borderRadius:10,padding:'10px'}}>
               <button onClick={exportGeoJson}>Export as geojson</button>
+              <br/>
                Update using Geojson File - 
-              <input type={'file'} onChange={updateGeoJson}  name={'Update with geojson'}></input>
+              <input type={'file'} onChange={updateGeoJson}  name={'Update with geojson'} placeholder={'choose geojson file'}></input>
               {isUploading?<CircularProgress/>:null}
             </div>
             <div ref={mapContainer} className="map-container" style={{ height: "100vh" }} />

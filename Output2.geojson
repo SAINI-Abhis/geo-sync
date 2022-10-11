@@ -4,13 +4,13 @@
         {
             "type": "Feature",
             "properties": {
-                "name": "Adarsh Nagar, Jaipur - RSPCB"
+                "name": "Naharlagun, Naharlagun - APSPCB"
             },
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    75.836858,
-                    26.902909
+                    93.679645,
+                    27.103358
                 ]
             }
         }
