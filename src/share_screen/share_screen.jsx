@@ -2,8 +2,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
-import { async } from "@firebase/util";
 import { CircularProgress } from "@mui/material";
+import { Marker, Popup } from "mapbox-gl";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0ZW5kcmExMjQxIiwiYSI6ImNreGc2MjI5cjFwaTQyd3BkeGZ6NWVhMHUifQ.Wh1LgnYc3GQFGCJ7l-C2tQ';
 
@@ -45,17 +45,27 @@ const SharePage = () => {
     initMap();
     load_data();
   }, []);
+
+  const addMarkers = (data)=>{
+    for(const points of data.features){
+      console.log(points);
+      const marker = new Marker().setLngLat(points.geometry.coordinates).addTo(map.current)
+      .setPopup(new Popup().setHTML(`<p> ${points.properties.name} </p>`));
+    }
+  }
+
   useEffect(() => {
     if(!map.current) return;
     if(!data) return;
-    map.current.addLayer({
-      id: 'locations',
-      type: 'circle',
-      source: {
-        type: 'geojson',
-        data: data
-      }
-    });
+    // map.current.addLayer({
+    //   id: 'locations',
+    //   type: 'circle',
+    //   source: {
+    //     type: 'geojson',
+    //     data: data
+    //   }
+    // });
+    addMarkers(data);
   }, [data,map.current])
   const exportGeoJson = ()=>{
     const fileData = JSON.stringify(data,null,2);
@@ -67,7 +77,6 @@ const SharePage = () => {
     link.click();
   }
   const updateGeoJson = (e)=>{
-    
     console.log(e);
     var GetFile = new FileReader();
     GetFile.onload = async () => {
