@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
 import { CircularProgress } from "@mui/material";
 import { Marker, Popup } from "mapbox-gl";
+import Update from "./Update";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2F0ZW5kcmExMjQxIiwiYSI6ImNreGc2MjI5cjFwaTQyd3BkeGZ6NWVhMHUifQ.Wh1LgnYc3GQFGCJ7l-C2tQ';
 
@@ -17,7 +18,7 @@ const SharePage = () => {
 
   let path = window.location.href;
   let paths = path.split('/');
-  let id = paths[paths.length - 1];
+  let id = paths[paths.length - 1].split('?')[0];
   const ref = doc(db, 'data', id);
   const [data, setData] = useState(null);
   const load_data = async () => {
@@ -46,11 +47,22 @@ const SharePage = () => {
     load_data();
   }, []);
 
+  const html = `
+      <form action="/vhu1vs76lmt4XfKDqSTE" method="GET">
+      <p style={{textAlign:'center'}}>Enter Property Name (mandatory)</p>
+      <input type='text' name="key"></input>
+      <br>
+      <p style={{textAlign:'center'}}>Enter Property Value (mandatory)</p>
+      <input type='text' name="value" ></input>
+      <button type="submit"> Add </button>
+      </form>
+
+  `;
   const addMarkers = (data)=>{
     for(const points of data.features){
       console.log(points);
       const marker = new Marker().setLngLat(points.geometry.coordinates).addTo(map.current)
-      .setPopup(new Popup().setHTML(`<p> ${points.properties.name} </p>`));
+      .setPopup(new Popup().setHTML(html));
     }
   }
 
